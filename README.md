@@ -8,9 +8,23 @@ Type preserving dynamic heterogeneous containers for C++.
  2. Eliminate reference semantics both in the interface and the container backbone.
  3. Achieve high performance, beyond what polymorphic or type erasure dynamic dispatch can achieve.
  
+ The interface that the present concept achieves can be summarized in the following snippet:
+ ```c++
+ struct a { }; void process ( const a& ) { /*...*/ }
+ struct b { }; void process ( const b& ) { /*...*/ }
+ struct c { }; void process ( const c& ) { /*...*/ }
+ 
+ using heap_collection = eumorphic::collection< std::vector, a, b, c>;
+ 
+ collection.insert( a{} );
+ collection.insert( c{} );
+ collection.insert( b{} );
+ 
+ eumorphic::for_each( collection, []( auto &&elem ) { process( elem ); } );
+ ```
 It should be noted that we are not trying to address all the use cases polymorphism is dealing with - only the cases relating to dynamic heterogeneous containers.
 
-The development is heavily motivated by modern software design issues raised in [[Parent2013]](https://www.youtube.com/watch?v=bIhUE5uUFOA):
+The development is heavily motivated by modern software design issues raised in [[Parent2013]](https://www.youtube.com/watch?v=bIhUE5uUFOA)
 
 ## Performance
 
