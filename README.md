@@ -8,9 +8,7 @@ Type preserving dynamic heterogeneous containers for C++.
  2. Eliminate reference semantics both in the interface and the container backbone.
  3. Achieve high performance, beyond what polymorphic or type erasure dynamic dispatch can achieve.
  
-Points to be made:
-
-- We are not trying to address all the problems polymorphism is dealing with. Only those relating to dynamic heterogeneous containers.
+It should be noted that we are not trying to address all the use cases polymorphism is dealing with - only the cases relating to dynamic heterogeneous containers.
 
 ## Properties
 
