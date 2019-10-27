@@ -27,10 +27,6 @@ It should be noted that we are not trying to address all the use cases polymorph
 
 The development is heavily motivated by modern software design issues raised in [[Parent2013]](https://www.youtube.com/watch?v=bIhUE5uUFOA).
 
-## Performance
-
-**The requirement of a polymorphic type, by definition, comes from its use.** 
-
 ``eumorphic`` achieves dynamic heterogeneous containers that observe the following:
 
 1. There are no polymorphic types, only a use of similar types.
@@ -38,7 +34,7 @@ The development is heavily motivated by modern software design issues raised in 
 3. Easy adaptation of existing classes.
 4. Value semantics.
 5. No coupling.
-6. Performance - We completely avoid overhead of runtime dispatch.
+6. Performance - No overhaed due to runtime dispatch for unordered collections of data.
 7. Able to be used in non-template functions.
 
 The properties list was adapted from [[Bandela2019]](https://github.com/CppCon/CppCon2019/blob/master/Presentations/polymorphism__virtual/polymorphism__virtual__john_bandela__cppcon_2019.pdf).
