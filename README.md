@@ -1,6 +1,13 @@
 # eumoprhic
 Type preserving dynamic heterogeneous containers for C++.
 
+```eumorphic``` is a proof of concept implementation of containers that are type agnostic. 
+
+ The design is motivated by the following needs.
+ 1. Eliminate coupling between the data types stored in heterogeneous containers.
+ 2. Eliminate reference semantics both in the interface and the container backbone.
+ 3. Achieve high performance, beyond what polymorphic or type erasure dynamic dispatch can achieve.
+ 
 Points to be made:
 
 - We are not trying to address all the problems polymorphism is dealing with. Only those relating to dynamic heterogeneous containers.
