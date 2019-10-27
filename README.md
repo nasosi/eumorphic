@@ -40,7 +40,7 @@ The development is heavily motivated by modern software design issues raised in 
 The properties list was adapted from [[Bandela2019]](https://github.com/CppCon/CppCon2019/blob/master/Presentations/polymorphism__virtual/polymorphism__virtual__john_bandela__cppcon_2019.pdf).
 
 # Performance
-Benchmarks comparing eumorphic with other types, for insertion and basic processing operations follow.
+Benchmarks comparing eumorphic with other types, for insertion and basic processing operations follow. Compiled with MSVC 2019 16.2.5.
 ![Insertion performance comparisons](doc/hetero_insertion_benchmark.png)
 ![Insertion performance comparisons](doc/hetero_access_benchmark.png)
 
