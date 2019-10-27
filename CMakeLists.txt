@@ -21,7 +21,7 @@ if ( HUNTER_ENABLED )
 else( )
 	find_package(Boost )
 	if ( NOT Boost_FOUND )
-		message( FATAL_ERROR "Boost was not found. Modify 'HUNTER_ENABLED' to ON to download using hunter.")
+		message( FATAL_ERROR "Boost was not found. Modify 'HUNTER_ENABLED' to ON to download using Hunter. It will take some time to download boost.")
 	endif()
 endif()
 
