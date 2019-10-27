@@ -1,0 +1,1 @@
+hunter_config( Boost VERSION "1.71.0-p0" )
