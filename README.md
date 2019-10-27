@@ -27,6 +27,7 @@ It should be noted that we are not trying to address all the use cases polymorph
 
 The development is heavily motivated by modern software design concerns raised in [[Parent2013]](https://www.youtube.com/watch?v=bIhUE5uUFOA).
 
+# Properties
 ``eumorphic`` achieves dynamic heterogeneous containers that observe the following:
 
 1. There are no polymorphic types, only a use of similar types.
