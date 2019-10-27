@@ -14,7 +14,8 @@ Type preserving dynamic heterogeneous containers for C++.
  struct b { }; void process ( const b& ) { /*...*/ }
  struct c { }; void process ( const c& ) { /*...*/ }
  
- using heap_collection = eumorphic::collection< std::vector, a, b, c>;
+ template <class T> using segment_container = std::vector<T>;
+ using heap_collection = eumorphic::collection< segment_container, a, b, c >;
  
  collection.insert( a{} );
  collection.insert( c{} );
