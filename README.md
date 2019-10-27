@@ -28,7 +28,7 @@ It should be noted that we are not trying to address all the use cases polymorph
 The development is heavily motivated by modern software design concerns raised in [[Parent2013]](https://www.youtube.com/watch?v=bIhUE5uUFOA).
 
 # Core concept
-As a data structure, ```eumorphic::collection``` is a tuple of vectors of different types. For example:
+As a data structure, ```eumorphic::collection``` is a tuple of arrays of different types. For example:
 ```cpp
 hana::tuple< std::vector<int>, std::vector<string>, std::vector<MyType> > collection_data;
 ```
