@@ -47,3 +47,7 @@ The properties list was adapted from [[Bandela2019]](https://github.com/CppCon/C
 Benchmarks comparing eumorphic with other types, for insertion and basic processing operations follow.
 ![Insertion performance comparisons](doc/hetero_insertion_benchmark.png)
 ![Insertion performance comparisons](doc/hetero_access_benchmark.png)
+
+# Conclusions
+We developed concepts that demosntrate that dynamic heterogeneous containers do not generally need to rely on dynamic dispatch. Also, we demonstrated that such ideas could provide total decoupling between types. They also result in interfaces with extremely low boilerplate requirements. An additional advantage is that decoupled heterogeneous dynamic containers can be constructed on the stack.
+ 
