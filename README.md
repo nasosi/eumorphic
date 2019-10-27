@@ -1,5 +1,6 @@
 # eumoprhic
-Type preserving dynamic heterogeneous containers for C++.
+[Type preserving dynamic heterogeneous containers for C++.]
+
 
 ```eumorphic``` is a *proof of concept* implementation of containers that are type agnostic. 
 
