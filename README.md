@@ -25,7 +25,7 @@ Type preserving dynamic heterogeneous containers for C++.
  ```
 It should be noted that we are not trying to address all the use cases polymorphism is dealing with - only the cases relating to dynamic heterogeneous containers.
 
-The development is heavily motivated by modern software design issues raised in [[Parent2013]](https://www.youtube.com/watch?v=bIhUE5uUFOA).
+The development is heavily motivated by modern software design concerns raised in [[Parent2013]](https://www.youtube.com/watch?v=bIhUE5uUFOA).
 
 ``eumorphic`` achieves dynamic heterogeneous containers that observe the following:
 
