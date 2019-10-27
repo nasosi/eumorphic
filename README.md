@@ -27,6 +27,13 @@ It should be noted that we are not trying to address all the use cases polymorph
 
 The development is heavily motivated by modern software design concerns raised in [[Parent2013]](https://www.youtube.com/watch?v=bIhUE5uUFOA).
 
+# Core concept
+As a data structure, ```eumorphic::collection``` is a tuple of vectors of different types. For example:
+```cpp
+hana::tuple< std::vector<int>, std::vector<string>, std::vector<MyType> > collection_data;
+```
+The rest of the implementation deals with insertion and access operations for unordered (where the user does not care about the iteration order) and ordered collections (where the user expects that the iteration order will be the same with the insertion order).
+
 # Properties
 ``eumorphic`` achieves dynamic heterogeneous containers that observe the following:
 
