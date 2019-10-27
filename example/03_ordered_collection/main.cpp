@@ -30,13 +30,8 @@ int main()
 
 	std::cout << "Ordered collection:\n";
 	eumorphic::for_each(collection, [](auto&& v)
-		{
-			print(v);
-			std::cout << ": " << typeid(v).name() << '\n';
-		});
-	
-
-	
-
-
+	{
+		print(v);
+		std::cout << ": " << typeid(v).name() << '\n';
+	});
 }

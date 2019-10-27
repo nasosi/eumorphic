@@ -17,22 +17,20 @@ using heap_collection = eumorphic::collection< container, a, b, c >;
 
 int main()
 {
-		heap_collection collection;
+	heap_collection collection;
 
-		collection.insert(a{});
-		for (auto i = 0; i != 3; i++)
+	collection.insert(a{});
+	for (auto i = 0; i != 3; i++)
+	{
+		collection.insert(c{});
+	}
+	collection.insert(b{});
+	collection.insert(b{});
+
+	std::cout << "On the heap: \n";
+	eumorphic::for_each( collection, [](auto&& v)
 		{
-			collection.insert(c{});
-		}
-		collection.insert(b{});
-		collection.insert(b{});
-
-		std::cout << "On the heap: \n";
-		eumorphic::for_each( collection, [](auto&& v)
-			{
-				print(v);
-				std::cout << ": " << typeid(v).name() << '\n';
-			});
-	
-
+			print(v);
+			std::cout << ": " << typeid(v).name() << '\n';
+		});
 }

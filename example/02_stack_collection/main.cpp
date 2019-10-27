@@ -34,7 +34,4 @@ int main()
 		print(v);
 		std::cout << ": " << typeid(v).name() << '\n';
 	});
-	
-
-
 }

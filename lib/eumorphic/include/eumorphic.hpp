@@ -64,7 +64,7 @@ namespace eumorphic
 			});
 	}
 
-	// Made the constructor do the work, because I couldn't make a function properly deduce the types
+	// Made the constructor do the work, because I couldn't make a function that properly deduces the types
 	// TODO: Investigate if we can do this with a function
 	template <class ...SubTypes>
 	struct subset_for_each

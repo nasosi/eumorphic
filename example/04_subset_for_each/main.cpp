@@ -48,5 +48,4 @@ int main()
 		std::cout << ": " << typeid(v).name() << '\n';
 	});
 
-
 }
