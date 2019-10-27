@@ -8,7 +8,7 @@ Type preserving dynamic heterogeneous containers for C++.
  2. Eliminate reference semantics both in the interface and the container backbone.
  3. Achieve high performance, beyond what polymorphic or type erasure dynamic dispatch can achieve.
  
- The interface that the present concept achieves can be summarized in the following snippet:
+ The interface that the present concept can provide,is summarized in the following snippet:
  ```c++
  struct a { }; void process ( const a& ) { /*...*/ }
  struct b { }; void process ( const b& ) { /*...*/ }
