@@ -24,3 +24,8 @@ Although we don't deal with polymorhpism (actually the opposite), a general conc
 7. Able to be used in non-template functions.
 
 The properties list was adapted from [[Bandela2019]](https://github.com/CppCon/CppCon2019/blob/master/Presentations/polymorphism__virtual/polymorphism__virtual__john_bandela__cppcon_2019.pdf).
+
+# Performance
+Benchmarks comparing eumorphic with other types, for insertion and basic processing operations follow.
+![Insertion performance comparisons](doc/hetero_insertion_benchmark.png)
+![Insertion performance comparisons](doc/hetero_access_benchmark.png)
