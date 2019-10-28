@@ -13,8 +13,8 @@ for j = 1 : length( files )
     container_size = dlmread( filename, ',',[0,1,0,1]);
     a=dlmread( filename, ',', 2, 1);
     
-    insertions = a(1:6,1)';
-    processing = a(7:end,1)';
+    insertions = a(1:7,1)';
+    processing = a(8:end,1)';
     
     cs=[cs; container_size];
     ins=[ins;insertions];
@@ -57,6 +57,7 @@ for k = 1:length(hb)
 end
 
 legend( 'std::vector of pointers', ...
+    'std::variant vector',...
     'boost::poly\_collection (restitution)', ...
     'boost::any\_collection (restitution)', ...
     'eumorphic::ordered\_collection (heap)', ...
@@ -67,7 +68,7 @@ set(gcf, 'Position', [50, 50, 1270, 547 ])
 title ( [ 'Per element insertion time']);
 text( 0.1, ymax*0.98, 'Lower is better','VerticalAlignment','Top' );
 
-set(gcf,'PaperPosition', [0.25, 2.5, 16, 6] )
+set(gcf,'PaperPosition', [0.25, 2.5, 18, 6] )
 
 drawnow
 
@@ -109,6 +110,7 @@ for k = 1:length(hb)
 end
 
 legend( 'std::vector of pointers', ...
+    'std::variant vector',...
     'boost::poly\_collection (restitution)', ...
     'boost::any\_collection (restitution)', ...
     'eumorphic::ordered\_collection (heap)', ...
@@ -120,7 +122,7 @@ title ( [ 'Per element processing time']);
 text( 0.1, ymax*0.98, 'Lower is better','VerticalAlignment','Top' );
 
 
-set(gcf,'PaperPosition', [0.25, 2.5, 16, 6] )
+set(gcf,'PaperPosition', [0.25, 2.5, 18, 6] )
 
 print( [ 'hetero_access_benchmark.png' ],'-r300','-dpng')
 print( [ 'hetero_access_benchmark.pdf' ],'-dpdf')

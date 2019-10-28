@@ -9,6 +9,7 @@
 #include <exception>
 #include <iostream>
 #include <numeric>
+#include <variant>
 #include <memory>
 #include <chrono>
 #include <random>
@@ -18,7 +19,7 @@
 
 double d = 0;
 
-constexpr std::size_t test_size = 100; // This needs to be restricted because of the stack frame size for the stack container
+constexpr std::size_t test_size = 5000; // This needs to be restricted because of the stack frame size for the stack container
 constexpr std::size_t average_repetitions = 100;
 
 constexpr std::size_t stack_array_size(std::size_t x)
@@ -88,6 +89,9 @@ using any_collection = boost::any_collection<concept_> ;
 using base_collection	= boost::base_collection<A>;
 using vec_collection	= std::vector<std::unique_ptr<A>>;
 
+using var_t = std::variant<A, B, C, D, CA, CB>;
+using variant_collection = std::vector< var_t>;
+
 void do_not_optimize_out(any_collection& c)
 {
 	if (c.size() > 0)
@@ -102,6 +106,18 @@ void do_not_optimize_out(any_collection& c)
 	{
 		d = (int)c.size();
 	}
+}
+
+void process(variant_collection& collection)
+{
+	for (auto e : collection)
+	{
+		std::visit([](auto&& v)
+			{
+				v.run();
+			}, e);
+	}
+
 }
 
 void process(any_collection& collection)
@@ -185,11 +201,41 @@ void do_not_optimize_out(vec_collection& v)
 {
 	if (v.size() > 0)
 	{
-		d = v[v.size() - 1]->data;
+		for ( auto &e : v )
+		d += e->data;
 	}
 	else
 	{
 		d = (int)v.size();
+	}
+}
+template <class T>
+void insert_default_value_of(variant_collection& v)
+{
+	v.push_back(T{});
+}
+
+template <class T, class E, class R >
+void insert_rnd_value_of(variant_collection& v, E& gen, const R& rnd)
+{
+	v.push_back( T{ rnd(gen) });
+}
+
+void do_not_optimize_out( variant_collection& col )
+{
+	if (col.size() > 0)
+	{
+		for (auto e : col)
+		{
+			std::visit([](auto&& v)
+				{
+					d += v.data;
+				}, e);
+		}
+	}
+	else
+	{
+		d = (int)col.size();
 	}
 }
 
@@ -347,6 +393,7 @@ int main()
 	std::size_t insert_elem_count     = processing_elem_count;
 
 	std::vector<double>			vec_processing_timings, vec_insert_timings;
+	std::vector<double>			var_processing_timings, var_insert_timings;
 	std::vector<double>			eoc_processing_timings, eoc_insert_timings;
 	std::vector<double>			bc_processing_timings,  bc_insert_timings;
 	std::vector<double>			ec_processing_timings,  ec_insert_timings;
@@ -354,7 +401,7 @@ int main()
 	std::vector<double>			any_processing_timings, any_insert_timings;
 
 	std::default_random_engine		gen;
-	std::uniform_int_distribution<int>	rnd_test_type(0, 2*6 - 1);
+	std::uniform_int_distribution<int>	rnd_test_type(0, 2*7 - 1);
 
 	std::size_t samples = num_types * average_repetitions;
 	for (auto i = 0; i != samples; i++)
@@ -364,18 +411,20 @@ int main()
 		switch (rnd_test_type(gen))
 		{
 		case 0: vec_insert_timings.push_back(benchmark_insert  <vec_collection>(insert_elem_count)); break;
-		case 1: bc_insert_timings.push_back(benchmark_insert  <base_collection>(insert_elem_count)); break;
-		case 2: any_insert_timings.push_back(benchmark_insert  <any_collection>(insert_elem_count)); break;
-		case 3: eoc_insert_timings.push_back(benchmark_insert  <ordered_heap_collection>(insert_elem_count)); break;
-		case 4: ec_insert_timings.push_back(benchmark_insert  <heap_collection>(insert_elem_count)); break;
-		case 5: esc_insert_timings.push_back(benchmark_insert<stack_collection>(insert_elem_count)); break;
+		case 1: var_insert_timings.push_back(benchmark_insert  <variant_collection>(insert_elem_count)); break;
+		case 2: bc_insert_timings.push_back(benchmark_insert  <base_collection>(insert_elem_count)); break;
+		case 3: any_insert_timings.push_back(benchmark_insert  <any_collection>(insert_elem_count)); break;
+		case 4: eoc_insert_timings.push_back(benchmark_insert  <ordered_heap_collection>(insert_elem_count)); break;
+		case 5: ec_insert_timings.push_back(benchmark_insert  <heap_collection>(insert_elem_count)); break;
+		case 6: esc_insert_timings.push_back(benchmark_insert<stack_collection>(insert_elem_count)); break;
 
-		case 6: vec_processing_timings.push_back(benchmark_processing  <vec_collection>( processing_elem_count)); break;
-		case 7: bc_processing_timings.push_back(benchmark_processing  <base_collection>( processing_elem_count)); break;
-		case 8: any_processing_timings.push_back(benchmark_processing  <any_collection>(processing_elem_count)); break;
-		case 9: eoc_processing_timings.push_back(benchmark_processing  <ordered_heap_collection>(processing_elem_count)); break;
-		case 10: ec_processing_timings.push_back(benchmark_processing  <heap_collection>( processing_elem_count)); break;
-		case 11: esc_processing_timings.push_back(benchmark_processing<stack_collection>( processing_elem_count)); break;
+		case 7: vec_processing_timings.push_back(benchmark_processing  <vec_collection>( processing_elem_count)); break;
+		case 8: var_processing_timings.push_back(benchmark_processing  <variant_collection>(processing_elem_count)); break;
+		case 9: bc_processing_timings.push_back(benchmark_processing  <base_collection>( processing_elem_count)); break;
+		case 10: any_processing_timings.push_back(benchmark_processing  <any_collection>(processing_elem_count)); break;
+		case 11: eoc_processing_timings.push_back(benchmark_processing  <ordered_heap_collection>(processing_elem_count)); break;
+		case 12: ec_processing_timings.push_back(benchmark_processing  <heap_collection>( processing_elem_count)); break;
+		case 13: esc_processing_timings.push_back(benchmark_processing<stack_collection>( processing_elem_count)); break;
 
 
 		default: throw std::runtime_error("Unhandled test type id."); break;
@@ -390,18 +439,21 @@ int main()
 
 	try
 	{
-		display_results("Vector of pointers insertion            ", vec_insert_timings);
-		display_results("boost::base_collection insertion time   ", bc_insert_timings);
-		display_results("boost::any_collection insertion time    ", any_insert_timings);
-		display_results("eumorphic::ordered_ collection ins. time", eoc_insert_timings);
-		display_results("eumorphic::collection insertion time    ", ec_insert_timings);
-		display_results("eumorphic::collection (stack) ins. time ", esc_insert_timings);
-		display_results("Vector of pointers processing time      ", vec_processing_timings);
-		display_results("boost::base_collection processing time  ", bc_processing_timings);
-		display_results("boost::any_collection processing time   ", any_processing_timings);
-		display_results("eumorphic::ordered_collection pr. time  ", eoc_processing_timings); 
-		display_results("eumorphic::collection processing time   ", ec_processing_timings);
-		display_results("eumorphic::collection (stack) pr. time  ", esc_processing_timings);
+		display_results("Vector of pointers insertion        ", vec_insert_timings);
+		display_results("Variant vector insertion            ", var_insert_timings);
+		display_results("boost::base_collection insertion    ", bc_insert_timings);
+		display_results("boost::any_collection insertion     ", any_insert_timings);
+		display_results("eumorphic::ordered_ collection ins. ", eoc_insert_timings);
+		display_results("eumorphic::collection insertion     ", ec_insert_timings);
+		display_results("eumorphic::collection (stack) ins.  ", esc_insert_timings);
+
+		display_results("Vector of pointers processing       ", vec_processing_timings);
+		display_results("Variant vector processing           ", var_processing_timings);
+		display_results("boost::base_collection processing   ", bc_processing_timings);
+		display_results("boost::any_collection processing    ", any_processing_timings);
+		display_results("eumorphic::ordered_collection pr.   ", eoc_processing_timings); 
+		display_results("eumorphic::collection processing    ", ec_processing_timings);
+		display_results("eumorphic::collection (stack) pr.   ", esc_processing_timings);
 	}
 	catch (std::exception& e)
 	{
