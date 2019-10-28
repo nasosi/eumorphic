@@ -39,14 +39,14 @@ The rest of the implementation deals with insertion and access operations for un
 ``eumorphic`` achieves dynamic heterogeneous containers that observe the following:
 
 1. There are no polymorphic types, only a use of similar types.
-2. Minimal boilerplate
-3. Easy adaptation of existing classes.
+2. Minimal boilerplate.
+3. Minimal adaptation requirements for existing types.
 4. Value semantics.
 5. No coupling.
 6. Performance - No overhaed due to runtime dispatch for unordered collections of data.
 7. Able to be used in non-template functions.
 
-The properties list was adapted from [[Bandela2019]](https://github.com/CppCon/CppCon2019/blob/master/Presentations/polymorphism__virtual/polymorphism__virtual__john_bandela__cppcon_2019.pdf).
+The properties list is a modification of the list in [[Bandela2019]](https://github.com/CppCon/CppCon2019/blob/master/Presentations/polymorphism__virtual/polymorphism__virtual__john_bandela__cppcon_2019.pdf).
 
 # Performance
 Benchmarks comparing eumorphic with other types, for insertion and basic processing operations follow. Compiled with MSVC 2019 16.2.5.
