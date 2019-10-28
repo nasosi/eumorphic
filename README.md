@@ -46,7 +46,7 @@ The rest of the implementation deals with insertion and access operations for un
 3. Minimal adaptation requirements for existing types.
 4. Value semantics.
 5. No coupling.
-6. Performance - No overhead due to elimination of runtime dispatch for unordered collections of data.
+6. Performance - No dynamic dispatch overhead for unordered collections of data.
 7. Able to be used in non-template functions.
 
 The properties list is a modification of the list in [[Bandela2019]](https://github.com/CppCon/CppCon2019/blob/master/Presentations/polymorphism__virtual/polymorphism__virtual__john_bandela__cppcon_2019.pdf).
