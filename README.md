@@ -19,6 +19,7 @@
  using heap_collection = eumorphic::collection< segment_container, a, b, c >;
  
  //...
+ heap_collecton collection;
 
  collection.insert( a{} );
  collection.insert( c{} );
