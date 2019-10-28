@@ -1,4 +1,4 @@
-# eumoprhic
+# eumorphic
 [Type preserving dynamic heterogeneous containers for C++.]
 
 
@@ -54,5 +54,5 @@ Benchmarks comparing eumorphic with other types, for insertion and basic process
 ![Insertion performance comparisons](doc/hetero_access_benchmark.png)
 
 # Conclusions
-We developed concepts that demosntrate that dynamic heterogeneous containers do not generally need to rely on dynamic dispatch. Also, we demonstrated that such ideas could provide total decoupling between types. They also result in interfaces with extremely low boilerplate requirements. An additional advantage is that decoupled heterogeneous dynamic containers can be constructed on the stack.
+We developed concepts that demonstrate that dynamic heterogeneous containers do not generally need to rely on dynamic dispatch. Also, we demonstrate that such ideas could provide total decoupling between types. They also result in interfaces with extremely low boilerplate requirements. An additional advantage is that decoupled heterogeneous dynamic containers can be constructed on the stack.
  
