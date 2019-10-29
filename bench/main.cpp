@@ -17,7 +17,7 @@
 #include <limits>
 #include <cmath>
 
-double d = 0;
+static double d = 0;
 
 constexpr std::size_t test_size = 500; // This needs to be restricted because of the stack frame size for the stack container
 constexpr std::size_t average_repetitions = 100;
@@ -70,9 +70,15 @@ void insert_default_value_of(Container& c )
 }
 
 template <class T, class Container, class E, class R >
-void insert_rnd_value_of( Container& c, E& gen, const R &rnd )
+void insert_rnd_value_of( Container& c, E& gen, R &rnd )
 {
-	c.insert( T{ rnd( gen ) });
+    c.insert(T{ rnd( gen ) });
+}
+
+template <class T, class V, class E, class R >
+void insert_rnd_value_of( std::vector<V>& v, E& gen, R &rnd )
+{
+    v.push_back(T{ rnd( gen ) });
 }
 
 // any_collection specializations
@@ -172,7 +178,7 @@ void insert_default_value_of(vec_collection& v )
 }
 
 template <class T,  class E, class R >
-void insert_rnd_value_of( vec_collection& v, E& gen, const R& rnd)
+void insert_rnd_value_of( vec_collection& v, E& gen, R& rnd)
 {
 	v.push_back(std::make_unique<T>( rnd(gen) ));
 }
@@ -243,16 +249,16 @@ void do_not_optimize_out( variant_collection& col )
 
 // Utilities
 template <class Cont, class E, class R1, class R2  >
-void random_fill(Cont&container, E& gen, const R1& rnd_type, const R2& rnd, std::size_t count )
+void random_fill(Cont&container, E& gen, R1& rnd_type, R2& rnd, std::size_t count )
 {
 	for ( std::size_t i = 0; i != count; i++)
-	{
-		switch (rnd_type(gen))
+        {
+            switch (rnd_type(gen))
 		{
-			case 0: insert_rnd_value_of<A>( container, gen, rnd ); break;
-			case 1: insert_rnd_value_of<B>( container, gen, rnd ); break;
-			case 2: insert_rnd_value_of<C>( container, gen, rnd ); break;
-			case 3: insert_rnd_value_of<D>( container, gen, rnd ); break;
+                        case 0: insert_rnd_value_of<A> (container, gen, rnd); break;
+                        case 1: insert_rnd_value_of<B> (container, gen, rnd); break;
+                        case 2: insert_rnd_value_of<C> (container, gen, rnd); break;
+                        case 3: insert_rnd_value_of<D> (container, gen, rnd); break;
 			case 4: insert_rnd_value_of<CA>(container, gen, rnd); break;
 			case 5: insert_rnd_value_of<CB>(container, gen, rnd); break;
 		}
@@ -329,7 +335,7 @@ double benchmark_insert( std::size_t num_elems)
 	
 	auto start = tic();
 	{
-			for (auto i = 0; i != num_elems/5; i++)
+                        for (size_t i = 0; i != num_elems/5; i++)
 			{
 				insert_default_value_of<CA>(container);
 				insert_default_value_of<B>(container);
@@ -350,8 +356,9 @@ double benchmark_processing( std::size_t num_elems)
 {
 	Cont container;
 
-	//std::cout << "p";
-	std::random_device					gen;
+        //std::cout << "p";
+        std::random_device rd;
+        std::mt19937_64					gen(rd());
 	std::uniform_int_distribution<>			rnd_type(0, 5 );
 	std::uniform_real_distribution<double>	rnd_value(0, 100000);
 	random_fill(container, gen, rnd_type, rnd_value, num_elems);
@@ -409,7 +416,7 @@ int main()
 	std::uniform_int_distribution<int>	rnd_test_type(0, 2*7 - 1);
 
 	std::size_t samples = num_types * average_repetitions;
-	for (auto i = 0; i != samples; i++)
+        for (size_t i = 0; i != samples; i++)
 	{
 		auto test_num = rnd_test_type(gen);
 		// std::cout << "[" << test_num;

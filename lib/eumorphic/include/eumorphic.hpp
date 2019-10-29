@@ -98,7 +98,7 @@ namespace eumorphic
 		subset_for_each(Collection& col, F&& f)
 		{
 			static  constexpr auto  subset_types = boost::hana::tuple_t<SubTypes...>;
-			static  constexpr auto  subset_segments_container_t = boost::hana::transform(subset_types, Collection::segment_container_template);
+                        [[maybe_unused]] static  constexpr auto  subset_segments_container_t = boost::hana::transform(subset_types, Collection::segment_container_template);
 
 			using namespace detail;
 			hana::for_each( col.data_, [&f](auto& vec)
@@ -129,21 +129,18 @@ namespace eumorphic
 		template <class T>
 		constexpr void insert(T&& value)
 		{
-			using namespace detail;
-			constexpr auto  type_index = index_of(segments_container_t, hana::type_c< Container<T> >);
+                        using namespace detail;
+                        constexpr auto  type_index = index_of(Base::segments_container_t, hana::type_c< Container<T> >);
 
-			types_order.push_back( type_index );
-	
-			hana::at(data_, type_index).push_back(std::forward<T>(value));
+                        types_order.push_back( type_index );
+
+                        hana::at(Base::data_, type_index).push_back(std::forward<T>(value));
 		}
 
 		// TODO: Facility to remove elements in ordered_collection
 
-		template <template <typename...> class Container, class F, class ...Types>
-		friend void for_each(ordered_collection<Container, Types...>& col, F&& f);
-
-		template <template <typename...> class Container, class F, class ...Types>
-		friend void for_each(ordered_collection<Container, Types...>& col, std::size_t start, F&& f);
+                template <template <typename...> class Container1, class F, class ...Types1>
+                friend void for_each(ordered_collection<Container1, Types1...>& col, F&& f);
 	};
 
 	template <template <typename...> class Container, class F, class ...Types>
@@ -173,12 +170,6 @@ namespace eumorphic
 		}
 	}
 
-	template <template <typename...> class Container, class F, class ...Types>
-	void for_each(ordered_collection<Container, Types...>& col, std::size_t start, F&& f)
-	{
-		static_assert(false, "Ordered collection middle for_each not implemented due to performance concerns.");
-	}
-
 	// Minimally developed just as proof of concept
 	template< class T, std::size_t MAX_SIZE >
 	struct bounded_array : std::array<T, MAX_SIZE>
@@ -187,31 +178,31 @@ namespace eumorphic
 		
 		using Base::Base;
 
-		const Base::size_type& size() const noexcept { return size_; }
+                const typename Base::size_type& size() const noexcept { return size_; }
 
 		void push_back( const T& elem)
 		{
 			this->operator[](size_++) = elem;
 		}
 
-		Base::iterator begin() noexcept
+                typename Base::iterator begin() noexcept
 		{
-			return Base::iterator(Base::data() );
+                        return typename Base::iterator(Base::data() );
 		}
 
-		Base::const_iterator begin() const noexcept
+                typename Base::const_iterator begin() const noexcept
 		{
-			return Base::const_iterator(Base::data() );
+                        return typename Base::const_iterator(Base::data() );
 		}
 
-		Base::iterator end() noexcept
+                typename Base::iterator end() noexcept
 		{
-			return Base::iterator(Base::data() + size_);
+                        return typename Base::iterator(Base::data() + size_);
 		}
 
-		Base::const_iterator end() const noexcept
+                typename Base::const_iterator end() const noexcept
 		{
-			return Base::const_iterator(Base::data() + size_);
+                        return typename Base::const_iterator(Base::data() + size_);
 		}
 
 	private:
