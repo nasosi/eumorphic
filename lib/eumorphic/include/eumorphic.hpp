@@ -126,9 +126,8 @@ namespace eumorphic
 		// This needs some serious testing.
 		using namespace detail;
 
-		std::array< std::size_t, sizeof...(Types) > ti; // Per type indexing
+		std::array< std::size_t, sizeof...(Types) > ti{}; // Per type indexing
 
-		for (auto& e : ti) { e = 0; }
 		auto  iter = col.types_order.begin();
 		while (iter != col.types_order.end())
 		{

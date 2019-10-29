@@ -19,7 +19,7 @@
 
 double d = 0;
 
-constexpr std::size_t test_size = 5000; // This needs to be restricted because of the stack frame size for the stack container
+constexpr std::size_t test_size = 100; // This needs to be restricted because of the stack frame size for the stack container
 constexpr std::size_t average_repetitions = 100;
 
 constexpr std::size_t stack_array_size(std::size_t x)
