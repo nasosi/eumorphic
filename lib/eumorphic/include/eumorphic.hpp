@@ -118,7 +118,6 @@ namespace eumorphic
 		friend void for_each(ordered_collection<Container, Types...>& col, F&& f);
 	};
 
-	// There is no reason why this shouldn't be for_each
 	template <template <typename...> class Container, class F, class ...Types>
 	void for_each( ordered_collection<Container, Types...>& col, F&& f)
 	{
