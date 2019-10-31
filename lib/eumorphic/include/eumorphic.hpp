@@ -56,6 +56,29 @@ namespace eumorphic
 
 	};
 
+
+
+	template <template <typename...> class Container, class F, class ...Types>
+	void for_each(collection<Container, Types...>& col, std::size_t start, F&& f)
+	{
+		using namespace detail;
+		std::size_t last_index = 0;
+		hana::for_each(col.data_, [&f, &last_index, &start](auto& vec)
+			{
+				
+				if (last_index + vec.size() > start)
+				{
+					auto i0 = (last_index < start) ? start - last_index : 0;
+
+					for (auto i = i0; i != vec.size(); i++)
+					{
+						f(vec[i]);
+					}
+				}
+				last_index += vec.size();
+			});
+	}
+
 	template <template <typename...> class Container, class F, class ...Types>
 	void for_each(collection<Container, Types...>& col, F&& f)
 	{
@@ -118,6 +141,9 @@ namespace eumorphic
 
 		template <template <typename...> class Container, class F, class ...Types>
 		friend void for_each(ordered_collection<Container, Types...>& col, F&& f);
+
+		template <template <typename...> class Container, class F, class ...Types>
+		friend void for_each(ordered_collection<Container, Types...>& col, std::size_t start, F&& f);
 	};
 
 	template <template <typename...> class Container, class F, class ...Types>
@@ -145,6 +171,12 @@ namespace eumorphic
 					}
 				});
 		}
+	}
+
+	template <template <typename...> class Container, class F, class ...Types>
+	void for_each(ordered_collection<Container, Types...>& col, std::size_t start, F&& f)
+	{
+		static_assert(false, "Ordered collection middle for_each not implemented due to performance concerns.");
 	}
 
 	// Minimally developed just as proof of concept
