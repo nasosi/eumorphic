@@ -36,7 +36,7 @@ set(gca,'XTickLabel', num2str(cs))
 xlabel('Array size');
 ylabel('Time (ns)');
 
-ymax=550;
+ymax=1000;
 ylim([0,ymax])
 for k = 1:length(hb)
     y= get(hb(k),'YData')

@@ -108,18 +108,6 @@ void do_not_optimize_out(any_collection& c)
 	}
 }
 
-void process(variant_collection& collection)
-{
-	for (auto e : collection)
-	{
-		std::visit([](auto&& v)
-			{
-				v.run();
-			}, e);
-	}
-
-}
-
 void process(any_collection& collection)
 {
 	boost::poly_collection::for_each<A, B, C, D, CA, CB>(
@@ -209,6 +197,8 @@ void do_not_optimize_out(vec_collection& v)
 		d = (int)v.size();
 	}
 }
+
+// std::vector of variants overloads
 template <class T>
 void insert_default_value_of(variant_collection& v)
 {
@@ -219,6 +209,18 @@ template <class T, class E, class R >
 void insert_rnd_value_of(variant_collection& v, E& gen, const R& rnd)
 {
 	v.push_back( T{ rnd(gen) });
+}
+
+void process(variant_collection& collection)
+{
+	for (auto e : collection)
+	{
+		std::visit([](auto&& v)
+			{
+				v.run();
+			}, e);
+	}
+
 }
 
 void do_not_optimize_out( variant_collection& col )
@@ -239,7 +241,6 @@ void do_not_optimize_out( variant_collection& col )
 	}
 }
 
-
 // Utilities
 template <class Cont, class E, class R1, class R2  >
 void random_fill(Cont&container, E& gen, const R1& rnd_type, const R2& rnd, std::size_t count )
@@ -258,52 +259,7 @@ void random_fill(Cont&container, E& gen, const R1& rnd_type, const R2& rnd, std:
 	}
 }
 
-
-// The actual benchmark code
-template <class Cont>
-double benchmark_insert( std::size_t num_elems)
-{
-	Cont container;
-
-	//std::cout << "i";
-
-	auto start = tic();
-	{
-		for ( auto i = 0; i != num_elems; i++)
-		{
-			insert_default_value_of<C>(container);
-		}
-	}
-	double t = toc(start);
-	double duration = t / container.size();
-	do_not_optimize_out(container);
-
-	return duration;
-}
-
-template <class Cont>
-double benchmark_processing( std::size_t num_elems)
-{
-	Cont container;
-
-	//std::cout << "p";
-	std::random_device					gen;
-	std::uniform_int_distribution<>			rnd_type(0, 5 );
-	std::uniform_real_distribution<double>	rnd_value(0, 100000);
-	random_fill(container, gen, rnd_type, rnd_value, num_elems);
-
-	auto start = tic();
-	{
-		process(container);
-	}
-	double t = toc(start);
-	double duration = t / container.size();
-	do_not_optimize_out(container);
-
-	return duration;
-}
-
-double mean( const std::vector<double>& v)
+double mean(const std::vector<double>& v)
 {
 	if (v.size() == 0)
 	{
@@ -350,7 +306,7 @@ double max_elem(const std::vector<double>& v)
 
 double stdev(std::vector<double> vec)
 {
-	if ( vec.size() == 0 ) return NAN;
+	if (vec.size() == 0) return NAN;
 
 	double sum = 0;
 	double mu = mean(vec);
@@ -361,6 +317,57 @@ double stdev(std::vector<double> vec)
 
 	return std::sqrt(sum / (vec.size() - 1));
 }
+
+
+// The actual benchmark code
+template <class Cont>
+double benchmark_insert( std::size_t num_elems)
+{
+	Cont container;
+
+	//std::cout << "i";
+	
+	auto start = tic();
+	{
+			for (auto i = 0; i != num_elems/5; i++)
+			{
+				insert_default_value_of<CA>(container);
+				insert_default_value_of<B>(container);
+				insert_default_value_of<A>(container);
+				insert_default_value_of<C>(container);
+				insert_default_value_of<D>(container);
+			}
+	}
+	double t = toc(start);
+	double duration = t / container.size();
+	do_not_optimize_out(container);
+
+	return duration;
+}
+
+template <class Cont>
+double benchmark_processing( std::size_t num_elems)
+{
+	Cont container;
+
+	//std::cout << "p";
+	std::random_device					gen;
+	std::uniform_int_distribution<>			rnd_type(0, 5 );
+	std::uniform_real_distribution<double>	rnd_value(0, 100000);
+	random_fill(container, gen, rnd_type, rnd_value, num_elems);
+
+	auto start = tic();
+	{
+		process(container);
+	}
+	double t = toc(start);
+	double duration = t / container.size();
+	do_not_optimize_out(container);
+
+	return duration;
+}
+
+
 
 void display_results( std::string label, const std::vector<double> &timings )
 {
@@ -385,20 +392,18 @@ void display_results( std::string label, const std::vector<double> &timings )
 
 }
 
-
-
 int main()
 {
 	std::size_t processing_elem_count = test_size;
 	std::size_t insert_elem_count     = processing_elem_count;
 
-	std::vector<double>			vec_processing_timings, vec_insert_timings;
-	std::vector<double>			var_processing_timings, var_insert_timings;
-	std::vector<double>			eoc_processing_timings, eoc_insert_timings;
-	std::vector<double>			bc_processing_timings,  bc_insert_timings;
-	std::vector<double>			ec_processing_timings,  ec_insert_timings;
-	std::vector<double>			esc_processing_timings, esc_insert_timings;
-	std::vector<double>			any_processing_timings, any_insert_timings;
+	std::vector<double>			vec_processing_timings, vec_insert_timings, vec_insert_ant_timings;
+	std::vector<double>			var_processing_timings, var_insert_timings, var_insert_ant_timings;
+	std::vector<double>			eoc_processing_timings, eoc_insert_timings, eoc_insert_ant_timings;
+	std::vector<double>			bc_processing_timings,  bc_insert_timings, bc_insert_ant_timings;
+	std::vector<double>			ec_processing_timings,  ec_insert_timings, ec_insert_ant_timings;
+	std::vector<double>			esc_processing_timings, esc_insert_timings, esc_insert_ant_timings;
+	std::vector<double>			any_processing_timings, any_insert_timings, any_insert_ant_timings;
 
 	std::default_random_engine		gen;
 	std::uniform_int_distribution<int>	rnd_test_type(0, 2*7 - 1);
@@ -426,7 +431,6 @@ int main()
 		case 12: ec_processing_timings.push_back(benchmark_processing  <heap_collection>( processing_elem_count)); break;
 		case 13: esc_processing_timings.push_back(benchmark_processing<stack_collection>( processing_elem_count)); break;
 
-
 		default: throw std::runtime_error("Unhandled test type id."); break;
 		}
 		// std::cout << "]";
@@ -439,21 +443,21 @@ int main()
 
 	try
 	{
-		display_results("Vector of pointers insertion        ", vec_insert_timings);
-		display_results("Variant vector insertion            ", var_insert_timings);
-		display_results("boost::base_collection insertion    ", bc_insert_timings);
-		display_results("boost::any_collection insertion     ", any_insert_timings);
-		display_results("eumorphic::ordered_ collection ins. ", eoc_insert_timings);
-		display_results("eumorphic::collection insertion     ", ec_insert_timings);
-		display_results("eumorphic::collection (stack) ins.  ", esc_insert_timings);
+		display_results("Vector of pointers insertion           ", vec_insert_timings);
+		display_results("Variant vector insertion               ", var_insert_timings);
+		display_results("boost::base_collection insertion       ", bc_insert_timings);
+		display_results("boost::any_collection insertion        ", any_insert_timings);
+		display_results("eumorphic::ordered_ collection ins.    ", eoc_insert_timings);
+		display_results("eumorphic::collection insertion        ", ec_insert_timings);
+		display_results("eumorphic::collection (stack) ins.     ", esc_insert_timings);
 
-		display_results("Vector of pointers processing       ", vec_processing_timings);
-		display_results("Variant vector processing           ", var_processing_timings);
-		display_results("boost::base_collection processing   ", bc_processing_timings);
-		display_results("boost::any_collection processing    ", any_processing_timings);
-		display_results("eumorphic::ordered_collection pr.   ", eoc_processing_timings); 
-		display_results("eumorphic::collection processing    ", ec_processing_timings);
-		display_results("eumorphic::collection (stack) pr.   ", esc_processing_timings);
+		display_results("Vector of pointers processing           ", vec_processing_timings);
+		display_results("Variant vector processing               ", var_processing_timings);
+		display_results("boost::base_collection processing       ", bc_processing_timings);
+		display_results("boost::any_collection processing        ", any_processing_timings);
+		display_results("eumorphic::ordered_collection pr.       ", eoc_processing_timings); 
+		display_results("eumorphic::collection processing        ", ec_processing_timings);
+		display_results("eumorphic::collection (stack) pr.       ", esc_processing_timings);
 	}
 	catch (std::exception& e)
 	{
