@@ -15,11 +15,12 @@
  struct b { }; void process ( const b& ) { /*...*/ }
  struct c { }; void process ( const c& ) { /*...*/ }
  
- template <class T> using segment_container = std::vector<T>;
- using heap_collection = eumorphic::collection< segment_container, a, b, c >;
+ template <class T> 
+ using segment_container_t = std::vector<T>;
+ using heap_collection_t   = eumorphic::collection< segment_container_t, a, b, c >;
  
  //...
- heap_collection collection;
+ heap_collection_t collection;
 
  collection.insert( a{} );
  collection.insert( c{} );
