@@ -31,7 +31,10 @@
  collection.insert( c{} );
  collection.insert( b{} );
  
- eumorphic::for_each( collection, []( auto &&elem ) { process( elem ); } );
+ eumorphic::for_each( collection, []( auto &&elem ) 
+ { 
+     process( elem ); 
+ } );
  ```
 It should be noted that we are not trying to address all the use cases polymorphism is dealing with - only the cases relating to dynamic heterogeneous containers.
 
