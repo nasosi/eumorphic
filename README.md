@@ -18,8 +18,7 @@
  template <class T> 
  using segment_container_t = std::vector<T>;
  
- using collection_t   = 
-     eumorphic::collection
+ using collection_t = eumorphic::collection
      < 
          segment_container_t, 
          a, b, c 
