@@ -98,8 +98,9 @@ namespace eumorphic
 		subset_for_each(Collection&& col, F&& f)
 		{
 			static  constexpr auto  subset_types = boost::hana::tuple_t<SubTypes...>;
-                        [[maybe_unused]] static  constexpr auto  subset_segments_container_t = boost::hana::transform(subset_types, Collection::segment_container_template);
-
+			using Collection_t = std::decay_t<Collection>;
+                        [[maybe_unused]] static  constexpr auto  subset_segments_container_t = boost::hana::transform(subset_types, Collection_t::segment_container_template);
+			
 			using namespace detail;
 			hana::for_each( col.data_, [&f](auto& vec)
 			{
