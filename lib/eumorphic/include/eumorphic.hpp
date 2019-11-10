@@ -144,7 +144,7 @@ namespace eumorphic
 	};
 
 	template <template <typename...> class Container, class F, class ...Types>
-	void for_each( ordered_collection<Container, Types...>&& col, F&& f)
+	void for_each( ordered_collection<Container, Types...>& col, F&& f)
 	{
 		// This needs some serious testing.
 		using namespace detail;
