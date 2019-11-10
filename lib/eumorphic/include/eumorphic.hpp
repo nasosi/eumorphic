@@ -58,8 +58,8 @@ namespace eumorphic
 
 
 
-	template <template <typename...> class Container, class F, class ...Types>
-	void for_each(const collection<Container, Types...>& col, std::size_t start, F&& f)
+	template <class Container, class F, class ...Types>
+	void for_each(Container&& col, std::size_t start, F&& f)
 	{
 		using namespace detail;
 		std::size_t last_index = 0;
@@ -79,8 +79,8 @@ namespace eumorphic
 			});
 	}
 
-	template <template <typename...> class Container, class F, class ...Types>
-	void for_each(const collection<Container, Types...>& col, F&& f)
+	template <class Container, class F, class ...Types>
+	void for_each(Container&& col, F&& f)
 	{
 		using namespace detail;
 		hana::for_each(col.data_, [&f](auto& vec)
@@ -95,7 +95,7 @@ namespace eumorphic
 	struct subset_for_each
 	{
 		template <class Collection, class F>
-		subset_for_each(const Collection& col, F&& f)
+		subset_for_each(Collection&& col, F&& f)
 		{
 			static  constexpr auto  subset_types = boost::hana::tuple_t<SubTypes...>;
                         [[maybe_unused]] static  constexpr auto  subset_segments_container_t = boost::hana::transform(subset_types, Collection::segment_container_template);
@@ -144,7 +144,7 @@ namespace eumorphic
 	};
 
 	template <template <typename...> class Container, class F, class ...Types>
-	void for_each( ordered_collection<Container, Types...>& col, F&& f)
+	void for_each( ordered_collection<Container, Types...>&& col, F&& f)
 	{
 		// This needs some serious testing.
 		using namespace detail;
