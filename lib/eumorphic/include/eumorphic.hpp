@@ -43,7 +43,8 @@ namespace eumorphic
 		template <class T>
 		constexpr void insert( T&& value )
 		{
-			get_segment<T>().push_back(std::forward<T>(value));
+			using Td = std::decay_t<T>;
+			get_segment<Td>().push_back(std::forward<T>(value));
 		}
 
 		std::size_t size()
@@ -55,8 +56,6 @@ namespace eumorphic
 		}
 
 	};
-
-
 
 	template <class Container, class F, class ...Types>
 	void for_each(Container&& col, std::size_t start, F&& f)
@@ -131,7 +130,8 @@ namespace eumorphic
 		constexpr void insert(T&& value)
 		{
                         using namespace detail;
-                        constexpr auto  type_index = index_of(Base::segments_container_t, hana::type_c< Container<T> >);
+						using Td = std::decay_t<T>;
+                        constexpr auto  type_index = index_of(Base::segments_container_t, hana::type_c< Container<Td> >);
 
                         types_order.push_back( type_index );
 

@@ -27,6 +27,9 @@ int main()
 	collection.insert(b{});
 	collection.insert(b{});
 
+	a a1;
+	collection.insert(a1);
+
 	std::cout << "On the heap: \n";
 	eumorphic::for_each( collection, [](auto&& v)
 		{

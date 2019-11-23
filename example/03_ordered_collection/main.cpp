@@ -15,6 +15,7 @@ void print(const c& cc) { std::cout << "c(" << cc.id << ")"; }
 template <class T> using container = std::vector<T>;
 using ordered_collection = eumorphic::ordered_collection< container, a, b, c >;
 
+
 int main()
 {
 	ordered_collection collection;
@@ -27,6 +28,9 @@ int main()
 	collection.insert(b{ id++ });
 	collection.insert(b{ id++ });
 	collection.insert(a{ id++ });
+
+	a a1;
+	collection.insert(a1);
 
 	std::cout << "Ordered collection:\n";
 	eumorphic::for_each(collection, [](auto&& v)
