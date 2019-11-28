@@ -1,3 +1,4 @@
 .vs/
 out/
 CMakeSettings.json
+_config.yml
