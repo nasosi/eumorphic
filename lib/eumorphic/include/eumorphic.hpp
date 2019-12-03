@@ -21,6 +21,19 @@ namespace eumorphic
 			)){ };
 			return size - dropped;
 		}
+
+		template <typename T, T Begin, class Func, T ...Is>
+		constexpr void static_for_impl(Func&& f, std::integer_sequence<T, Is...>)
+		{
+			(f(std::integral_constant<T, Begin + Is>{ }), ...);
+		}
+
+		template <typename T, T Begin, T End, class Func >
+		constexpr void static_for(Func&& f)
+		{
+			static_for_impl<T, Begin>(std::forward<Func>(f), std::make_integer_sequence<T, End - Begin>{ });
+		}
+
 	} //namespace detail
 
 	template <template <typename...> class Container, class ...Types>
@@ -55,6 +68,21 @@ namespace eumorphic
 			hana::for_each( data_, [&s](auto& vec) { s += vec.size(); } );
 			return s;
 		}
+
+		template <class ...AdditionalTypes>
+		collection<Container, Types..., AdditionalTypes...> add_types_and_copy()
+		{
+			// TODO: CHECK IF TYPES ALREADY EXIST AND ERROR OUT
+			using namespace detail;
+			collection<Container, Types..., AdditionalTypes...> extended;
+			static_for< std::size_t, 0, sizeof...(Types)>([&extended, this](auto i)
+				{
+					hana::at(extended.data_, i) = hana::at(this->data_, i);
+				});
+			return extended;
+		}
+
+
 
 	};
 

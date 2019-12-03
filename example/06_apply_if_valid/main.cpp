@@ -14,11 +14,10 @@ struct c {};
 void print(const c&) { std::cout << "c\n"; } 
 void print2(const c&) { std::cout << "c2\n"; }
 
+void print(int i) { std::cout << i << "\n"; }
+
 template <class T> using container = std::vector<T>;
 using heap_collection = eumorphic::collection< container, a, b, c >;
-
-static auto can_print2 = boost::hana::is_valid([](auto&& t)
-	-> decltype(print2(t)) {});
 
 int main()
 {
@@ -42,4 +41,15 @@ int main()
 				print2(v);
 			}
 		});
+
+	auto extended_collection = collection.add_types_and_copy<int>();
+	extended_collection.insert(2);
+	extended_collection.insert(3);
+
+	std::cout << "Extended collection\n";
+	eumorphic::for_each(extended_collection, [](auto&& v)
+		{
+			print(v);
+		});
+
 }
