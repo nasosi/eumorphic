@@ -90,21 +90,20 @@ namespace eumorphic
 	}
 
 	// Not working atm
-	template <class Container, class F, class ...Types>
-	void for_each_if_valid(Container&& col, F&& f)
-	{
-			using namespace detail;
-			hana::for_each(col.data_, [&f](auto& vec) 
-				{
-					auto maybe_apply_f_on = hana::sfinae([&f](auto&& p) 
-						-> decltype(f(p), bool()){ // It fails here. Does it mean that sfinae is not trasitive?
-							f(p);
-							return true;
-						});
-					for (auto& element : vec) { maybe_apply_f_on( element ); }
-
-				});	
-	}
+	//template <class Container, class F, class ...Types>
+	//void for_each_if_valid(Container&& col, F&& f)
+	//{
+	//		using namespace detail;
+	//		hana::for_each(col.data_, [&f](auto& vec) 
+	//			{
+	//				auto maybe_apply_f_on = hana::sfinae([&f](auto&& p) 
+	//					-> decltype(f(p), bool()){ // It fails here. Does it mean that sfinae is not trasitive?
+	//						f(p);
+	//						return true;
+	//					});
+	//				for (auto& element : vec) { maybe_apply_f_on( element ); }
+	//			});	
+	// }
 
 	// Made the constructor do the work, because I couldn't make a function that properly deduces the types
 	// TODO: Investigate if we can do this with a function
