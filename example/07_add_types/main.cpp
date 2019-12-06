@@ -44,4 +44,6 @@ int main()
 		{
 			print(v);
 		});
+
+	auto a = heap_collection{}.insert(int(2));
 }

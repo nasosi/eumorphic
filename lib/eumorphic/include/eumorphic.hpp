@@ -51,14 +51,78 @@ namespace eumorphic
 		{
 			using namespace detail;
 			constexpr auto  type_index = index_of(segments_container_t, hana::type_c< Container<T> >);
+
+			static_assert(type_index < sizeof...(Types), "Type is not part of the collection. Add types with 'add_types_and_copy()'.");
+
 			return hana::at(data_, type_index);
 		}
 
 		template <class T>
-		constexpr void insert( T&& value )
+		auto &insert( T&& value ) &
 		{
 			using Td = std::decay_t<T>;
 			get_segment<Td>().push_back(std::forward<T>(value));
+			return *this;
+		}
+
+		template <class T>
+		auto insert(T&& value) &&
+		{
+			using namespace detail;
+			constexpr auto  type_index = index_of(segments_container_t, hana::type_c< Container<T> >);
+
+			if constexpr (type_index < sizeof...(Types))
+			{
+				using Td = std::decay_t<T>;
+				get_segment<Td>().push_back(std::forward<T>(value));
+				return *this;
+			}
+			else
+			{
+				auto extended = add_types_and_copy<T>(); 
+				extended.insert(std::forward<T>(value));
+				return extended;
+			}
+		}
+
+		template < class T>
+		auto &insert_if(bool test, T&& value)&
+		{
+			using namespace detail;
+			constexpr auto  type_index = index_of(segments_container_t, hana::type_c< Container<T> >);
+
+			if (test)
+			{
+				using Td = std::decay_t<T>;
+				get_segment<Td>().push_back(std::forward<T>(value));
+			}
+			return *this;
+		}
+
+		template < class T>
+		auto insert_if(bool test, T&& value)&&
+		{
+			using namespace detail;
+			constexpr auto  type_index = index_of(segments_container_t, hana::type_c< Container<T> >);
+
+			if constexpr (type_index < sizeof...(Types))
+			{
+				if (test)
+				{
+					using Td = std::decay_t<T>;
+					get_segment<Td>().push_back(std::forward<T>(value));
+				}
+				return *this;
+			}
+			else
+			{
+				auto extended = add_types_and_copy<T>();
+				if (test)
+				{
+					extended.insert(std::forward<T>(value));
+				}
+				return extended;
+			}
 		}
 
 		std::size_t size()
@@ -72,7 +136,7 @@ namespace eumorphic
 		template <class ...AdditionalTypes>
 		collection<Container, Types..., AdditionalTypes...> add_types_and_copy()
 		{
-			// TODO: CHECK IF TYPES ALREADY EXIST AND ERROR OUT
+			// TODO: CHECK IF ANY OF THE TYPES ALREADY EXISTS AND ERROR OUT
 			using namespace detail;
 			collection<Container, Types..., AdditionalTypes...> extended;
 			static_for< std::size_t, 0, sizeof...(Types)>([&extended, this](auto i)
@@ -81,9 +145,6 @@ namespace eumorphic
 				});
 			return extended;
 		}
-
-
-
 	};
 
 	template <class Container, class F, class ...Types>
